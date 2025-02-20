@@ -1,0 +1,5 @@
+class AddBorrowerNameToBooks < ActiveRecord::Migration[8.0]
+  def change
+    add_column :books, :borrower_name, :string
+  end
+end

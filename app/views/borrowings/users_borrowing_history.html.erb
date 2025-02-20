@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Borrowing History</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      margin: 20px;
+    }
+    
+    h1 {
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background: #007bff;
+      color: white;
+    }
+    
+    td {
+      color: #333;
+    }
+    
+    .status-available {
+      color: green;
+      font-weight: bold;
+    }
+    
+    .status-borrowed {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📜 Borrowing History for <%= @borrower_name %></h1>
+
+  <% if @borrowings.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Author</th>
+          <th>Borrowed On</th>
+          <th>Returned On</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @borrowings.each do |borrowing| %>
+          <tr>
+            <td><%= borrowing.book.title %></td>
+            <td><%= borrowing.book.author %></td>
+            <td><%= borrowing.borrowed_at.strftime("%B %d, %Y %I:%M %p") %></td>
+            <td>
+              <% if borrowing.returned_at.present? %>
+                <%= borrowing.returned_at.strftime("%B %d, %Y %I:%M %p") %>
+              <% else %>
+                <span class="status-borrowed">⛔ Not Returned</span>
+              <% end %>
+            </td>
+            <td>
+              <% if borrowing.returned_at.nil? %>
+                <span class="status-borrowed">⛔ Borrowed</span>
+              <% else %>
+                <span class="status-available">✅ Returned</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No borrowing history found for this borrower.</p>
+  <% end %>
+
+  <br>
+  <a href="<%= books_path %>" class="btn btn-primary">🔙 Back to Library</a>
+</body>
+</html>
