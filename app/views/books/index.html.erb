@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Lending Library</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      margin: 20px;
+    }
+    
+    h1 {
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+    
+    table {
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background: #007bff;
+      color: white;
+    }
+    
+    td {
+      color: #333;
+    }
+    
+    .status-available {
+      color: green;
+      font-weight: bold;
+    }
+    
+    .status-borrowed {
+      color: red;
+      font-weight: bold;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 5px;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .btn-warning {
+      background-color: #ffc107;
+      color: white;
+    }
+    
+    input {
+      padding: 5px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 Book Lending Library</h1>
+
+  <a href="<%= new_book_path %>" class="btn btn-primary">➕ Add New Book</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @books.each do |book| %>
+       <tr>
+  <td><%= link_to book.title, book_path(book) %></td>
+  <td><%= book.author %></td>
+  
+  <td>
+  <% if book.status == "available" %>
+    <span class="status-available">✅ Available</span>
+  <% else %>
+    <span class="status-borrowed">⛔ Borrowed</span>
+    <% last_borrowing = book.borrowings.last %>
+    <% if last_borrowing && last_borrowing.returned_at.nil? %>
+      (Borrowed by: 
+      <strong>
+        <%= link_to last_borrowing.borrower_name, borrower_history_path(last_borrowing.borrower_name) %>
+      </strong>)
+    <% end %>
+  <% end %>
+</td>
+
+
+  <td>
+    <% if book.status == "available" %>
+      <%= form_with url: borrow_book_path(book), method: :post, local: true do |f| %>
+        <input type="text" name="borrowing[borrower_name]" placeholder="Enter your name" required>
+        <%= f.submit "Borrow", class: "btn btn-success" %>
+      <% end %>
+    <% else %>
+      <%= form_with url: return_book_path(book), method: :post, local: true do |f| %>
+        <%= f.submit "Return", class: "btn btn-warning" %>
+      <% end %>
+    <% end %>
+  </td>
+
+  <td>
+  <%= link_to "✖ Delete", book_path(book), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+</td>
+
+</tr>
+
+      <% end %>
+      
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add a New Book</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      margin: 20px;
+    }
+    
+    h1 {
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+
+    form {
+      width: 50%;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+    
+    label {
+      font-weight: bold;
+    }
+    
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-back {
+      display: block;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .btn-back:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>➕ Add a New Book</h1>
+
+  <%= form_with(model: @book, url: books_path, method: :post, local: true) do |f| %>
+    <label>Title:</label>
+    <%= f.text_field :title, required: true %>
+
+    <label>Author:</label>
+    <%= f.text_field :author, required: true %>
+
+    <%= f.submit "Add Book", class: "btn-primary" %>
+  <% end %>
+
+  <a href="<%= books_path %>" class="btn-back">← Back to Library</a>
+</body>
+</html>

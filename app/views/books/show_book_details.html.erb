@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @book.title %> Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      margin: 20px;
+    }
+    
+    h1 {
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+    
+    .card {
+      width: 60%;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background: #007bff;
+      color: white;
+    }
+    
+    td {
+      color: #333;
+    }
+    
+    .status-available {
+      color: green;
+      font-weight: bold;
+    }
+    
+    .status-borrowed {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📖 <%= @book.title %> Details</h1>
+
+  <div class="card">
+    <p><strong>Author:</strong> <%= @book.author %></p>
+    <p><strong>Status:</strong> 
+      <% if @book.status == "available" %>
+        <span class="status-available">✅ Available</span>
+      <% else %>
+        <span class="status-borrowed">⛔ Borrowed</span>
+      <% end %>
+    </p>
+
+    <h3>📜 Borrowing History</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Borrower</th>
+          <th>Borrowed At</th>
+          <th>Returned At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @borrowings.each do |borrowing| %>
+          <tr>
+            <td><%= borrowing.borrower_name %></td>
+            <td><%= borrowing.borrowed_at.strftime("%B %d, %Y %I:%M %p") %></td>
+            <td>
+              <% if borrowing.returned_at %>
+                <%= borrowing.returned_at.strftime("%B %d, %Y %I:%M %p") %>
+              <% else %>
+                ⏳ Not returned yet
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= form_with model: @book, method: :delete, local: true do %>
+      <%= submit_tag "Delete Book", data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+    <% end %>
+    
+  </div>
+
+  <br>
+  <a href="<%= books_path %>">🔙 Back to Books</a>
+</body>
+</html>
