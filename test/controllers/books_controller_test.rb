@@ -2,7 +2,7 @@ require "test_helper"
 
 class BooksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @book = books(:one)  # Assuming fixtures exist
+    @book = books(:one)  
   end
 
   test "should get index" do
@@ -18,7 +18,7 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to books_url
     follow_redirect!
     
-    # Check flash notice instead of response.body
+    
     assert_equal "Book added successfully!", flash[:notice]
   end
   
